@@ -131,18 +131,21 @@ export default function Hero() {
       gsap.set(label, { y: 0, opacity: 1 })
     }
 
-    const transitionToLabel = (newLabel) => {
+    const transitionToLabel = (newLabel, scrollDown = true) => {
       if (newLabel === currentLabelRef.current) return
       gsap.killTweensOf(label)
       currentLabelRef.current = newLabel
+      const exitY = scrollDown ? -80 : 80
+      const enterFromY = scrollDown ? 60 : -60
       gsap.to(label, {
-        y: -80,
+        y: exitY,
         opacity: 0,
         duration: 0.25,
         ease: 'power2.in',
         onComplete: () => {
           label.textContent = newLabel
-          gsap.set(label, { y: 60 })
+          label.classList.toggle('is-contact', newLabel === 'CONTACT')
+          gsap.set(label, { y: enterFromY })
           gsap.to(label, { y: 0, opacity: 1, duration: 0.35, ease: 'power2.out' })
         },
       })
@@ -154,9 +157,9 @@ export default function Hero() {
         trigger: bannerEl,
         start: 'top top',
         end: 'bottom top',
-        onEnter: () => transitionToLabel(BANNER_LABEL),
-        onEnterBack: () => transitionToLabel(BANNER_LABEL),
-        onLeave: () => transitionToLabel(heroSections[0]?.label || 'DRAMATIC'),
+        onEnter: () => transitionToLabel(BANNER_LABEL, true),
+        onEnterBack: () => transitionToLabel(BANNER_LABEL, false),
+        onLeave: () => transitionToLabel(heroSections[0]?.label || 'DRAMATIC', true),
       })
       triggers.push(bannerSt)
     }
@@ -170,31 +173,51 @@ export default function Hero() {
         trigger: panel,
         start: gi === 0 ? 'top top' : 'top 75%',
         end: gi === 0 ? 'bottom top' : 'top 25%',
-        onEnter: () => transitionToLabel(newLabel),
-        onEnterBack: () => transitionToLabel(newLabel),
-        onLeaveBack: () => transitionToLabel(prevLabel),
+        onEnter: () => transitionToLabel(newLabel, true),
+        onEnterBack: () => transitionToLabel(newLabel, false),
+        onLeaveBack: () => transitionToLabel(prevLabel, false),
       })
       triggers.push(st)
     })
 
     const contactEl = document.getElementById('contact')
     const lastLabel = groupStarts.length > 0 ? groupStarts[groupStarts.length - 1].label : 'PORTFOLIO'
+    const isMobile = () => window.matchMedia('(max-width: 767px)').matches
+    const isNarrow = () => window.matchMedia('(max-width: 1024px)').matches
+
+    // Mobile: hide label when scrolled past last portfolio panel, show again when scrolling back up to it
+    const lastPanel = panels[panels.length - 1]
+    if (lastPanel && label) {
+      const pastLastPanelSt = ScrollTrigger.create({
+        trigger: lastPanel,
+        start: 'bottom top',
+        end: 'bottom top',
+        onEnter: () => {
+          if (isNarrow()) document.body.classList.add('in-contact-section')
+        },
+        onLeaveBack: () => {
+          if (isNarrow()) document.body.classList.remove('in-contact-section')
+        },
+      })
+      triggers.push(pastLastPanelSt)
+    }
+
     if (contactEl && label) {
       const contactSt = ScrollTrigger.create({
         trigger: contactEl,
-        start: 'top 75%',
+        start: 'top bottom',
         end: 'top 25%',
         onEnter: () => {
-          transitionToLabel('CONTACT')
+          if (!isMobile()) transitionToLabel('CONTACT', true)
           document.body.classList.add('in-contact-section')
         },
         onEnterBack: () => {
-          transitionToLabel('CONTACT')
+          if (!isMobile()) transitionToLabel('CONTACT', false)
           document.body.classList.add('in-contact-section')
         },
         onLeave: () => document.body.classList.remove('in-contact-section'),
         onLeaveBack: () => {
-          transitionToLabel(lastLabel)
+          transitionToLabel(lastLabel, false)
           document.body.classList.remove('in-contact-section')
         },
       })
@@ -280,6 +303,7 @@ export default function Hero() {
                     sizes="(max-width: 1700px) 95vw, 1700px"
                     alt={section.image.alt || 'Makeup portfolio'}
                     className="panel-image-img"
+                    style={section.image.objectPosition ? { objectPosition: section.image.objectPosition } : undefined}
                   />
                 ) : null}
               </div>
@@ -306,6 +330,7 @@ export default function Hero() {
               srcSet={heroSections[expandedIndex].image.srcSet}
               sizes="95vw"
               alt={heroSections[expandedIndex].image.alt || 'Expanded view'}
+              style={heroSections[expandedIndex].image.objectPosition ? { objectPosition: heroSections[expandedIndex].image.objectPosition } : undefined}
             />
           </div>
           <button

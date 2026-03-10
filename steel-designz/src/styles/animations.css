@@ -87,7 +87,13 @@
   pointer-events: none;
 }
 
-@media (max-width: 767px) {
+/* Smaller label when showing CONTACT (productions + about + form area) */
+.panel-label-fixed.is-contact {
+  font-size: clamp(1.75rem, 4.5vw, 3rem);
+}
+
+/* Hide floating label on mobile/tablet only when at contact page — keeps labels in gallery */
+@media (max-width: 1024px) {
   body.in-contact-section .panel-label-fixed {
     display: none;
   }

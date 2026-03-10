@@ -3,7 +3,9 @@
  * Categories: dramatic, editorial, portfolio
  * Uses import.meta.glob for automatic discovery
  * Sizes: 320 (thumbnail), 640, 1024, 1600, 2000 (lightbox)
+ * Includes object-position per image to keep faces visible (object-fit: cover)
  */
+import { IMAGE_FOCAL_POINTS } from '../data/imageFocalPoints'
 
 const imageModules = import.meta.glob(
   '../assets/images/**/*.{jpg,jpeg,png,webp}',
@@ -75,11 +77,13 @@ export function buildGalleryData() {
       byCategory[category] = []
     }
 
+    const objectPosition = IMAGE_FOCAL_POINTS[filename] ?? 'center'
     byCategory[category].push({
       src,
       srcSet,
       alt: `${slugToTitle(category)} makeup look for fashion photoshoot`,
       filename,
+      objectPosition,
     })
   }
 
@@ -94,7 +98,7 @@ export function buildGalleryData() {
     .map(([slug, images]) => ({
       title: slugToTitle(slug),
       slug,
-      images: images.map(({ src, srcSet, alt }) => ({ src, srcSet, alt })),
+      images: images.map(({ src, srcSet, alt, objectPosition }) => ({ src, srcSet, alt, objectPosition })),
     }))
 }
 
