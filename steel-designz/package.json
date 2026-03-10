@@ -20,6 +20,7 @@
     "react-helmet-async": "^3.0.0",
     "sharp": "^0.34.5",
     "tailwindcss": "^4.2.1",
+    "three": "^0.183.2",
     "vite-imagetools": "^10.0.0"
   },
   "devDependencies": {

@@ -16,7 +16,7 @@ export function initSmoothScroll() {
 
   lenisInstance = new Lenis({
     duration: 1.2,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    easing: (t) => 1 - Math.pow(1 - t, 4),
     orientation: 'vertical',
     smoothWheel: true,
     wheelMultiplier: 1,
@@ -27,8 +27,8 @@ export function initSmoothScroll() {
   const scroller = document.documentElement
   ScrollTrigger.scrollerProxy(scroller, {
     scrollTop(value) {
-      if (arguments.length) lenisInstance.scrollTo(value)
-      return lenisInstance.scroll
+      if (arguments.length && lenisInstance) lenisInstance.scrollTo(value)
+      return lenisInstance ? lenisInstance.scroll : (document.documentElement?.scrollTop ?? window.scrollY ?? 0)
     },
     getBoundingClientRect() {
       return { top: 0, left: 0, width: window.innerWidth, height: window.innerHeight }

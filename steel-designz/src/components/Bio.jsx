@@ -9,8 +9,8 @@ export default function Bio() {
 
       <div className="max-w-2xl mx-auto text-center">
         <p className="body-text">
-          Professional makeup artist specializing in editorial, commercial,
-          and film production. Based in [Location], available for projects worldwide.
+          Professional makeup artist specializing in editorial and commercial.
+          Based in [Location], available for projects worldwide.
         </p>
         <p className="body-text mt-6">
           Placeholder bio content.

@@ -1,12 +1,12 @@
-import { useEffect } from 'react'
+import { useLayoutEffect } from 'react'
 import { initSmoothScroll, destroySmoothScroll } from '../animations/smoothScroll'
 
 /**
  * Hook to initialize Lenis smooth scrolling on mount
- * Call once at app root (Layout or App)
+ * Uses useLayoutEffect so Lenis + scrollerProxy are ready before child animations (ScrollTrigger) run
  */
 export function useLenis() {
-  useEffect(() => {
+  useLayoutEffect(() => {
     const lenis = initSmoothScroll()
 
     return () => {

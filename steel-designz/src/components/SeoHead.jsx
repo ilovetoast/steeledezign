@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet-async'
 
 const SITE_URL = 'https://steeldesignz.com'
 const DEFAULT_TITLE = 'Andrea Steele Makeup | Makeup Artist Portfolio'
-const DEFAULT_DESCRIPTION = 'Professional makeup artist specializing in editorial, commercial, and film production. Portfolio of selected work.'
+const DEFAULT_DESCRIPTION = 'Professional makeup artist specializing in editorial and commercial. Portfolio of selected work.'
 
 export default function SeoHead({
   title = DEFAULT_TITLE,
@@ -34,7 +34,7 @@ export default function SeoHead({
     '@context': 'https://schema.org',
     '@type': 'Portfolio',
     name: 'Andrea Steele Makeup Portfolio',
-    description: 'Selected makeup work across editorial, commercial, and film.',
+    description: 'Selected makeup work across editorial and commercial.',
     url: SITE_URL,
   }
 

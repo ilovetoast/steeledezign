@@ -16,12 +16,6 @@ export const categories = [
     description: 'Advertising and brand campaigns',
   },
   {
-    id: 'film-tv',
-    title: 'Film & TV',
-    slug: 'film-tv',
-    description: 'Production makeup and hair',
-  },
-  {
     id: 'bridal',
     title: 'Bridal',
     slug: 'bridal',
