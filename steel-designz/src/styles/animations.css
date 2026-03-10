@@ -1,0 +1,21 @@
+/* Animation utility classes - GSAP handles most animations */
+/* No opacity:0 here — gsap.from() handles initial state to avoid stuck grey images */
+
+.reveal-mask {
+  overflow: hidden;
+}
+
+.reveal-mask > * {
+  will-change: transform;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
