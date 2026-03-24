@@ -1,0 +1,2 @@
+﻿# Keep local only â€” .mov exports exceed GitHub limits (100MB hard cap)
+*.mov
