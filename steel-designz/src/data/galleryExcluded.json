@@ -1,0 +1,27 @@
+{
+  "minShortSidePx": 900,
+  "note": "Omitted at build time — short side below minimum, or HEIC (not supported by Vite imagetools; export as JPG/WebP to include)",
+  "omitted": [
+    "SPFX/IMG_0024.heic",
+    "SPFX/IMG_0422.HEIC",
+    "SPFX/IMG_1094.HEIC",
+    "SPFX/IMG_3669.HEIC",
+    "Beauty/1.jpeg",
+    "Beauty/10.jpeg",
+    "Beauty/12.jpeg",
+    "Beauty/6.jpeg",
+    "Beauty/Alannasmall.jpg",
+    "Beauty/cody2blue.jpg",
+    "Beauty/cody3 copy.jpg",
+    "Beauty/IMG_4539.jpg",
+    "Beauty/l (3).jpg",
+    "SPFX/IMG_0043.jpg",
+    "SPFX/Screen Shot 2013-11-07 at 5.30.25 PM.png",
+    "Stills/Comedy Bang Bang _ Jason Schwartzman.jpg",
+    "Stills/Cooper_s Bar _ Rhea Seehorn _ Hair.JPG",
+    "Stills/Emilie & Leo Matchett _ Emmys.jpg",
+    "Stills/Frankenstein_s Monster_s Monster, Frankenstein.jpeg",
+    "Stills/Rupert _ Caitlin Reilly.jpg",
+    "Wedding/image.jpeg"
+  ]
+}

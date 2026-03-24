@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Suggest object-position from face (Chrome)</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 52rem; margin: 1rem auto; padding: 0 1rem; }
+    #preview { max-width: 100%; height: auto; display: block; margin: 1rem 0; object-fit: contain; border: 1px solid #ccc; }
+    #box { position: relative; display: inline-block; max-width: 100%; }
+    #faceRect { position: absolute; border: 2px solid lime; pointer-events: none; box-sizing: border-box; }
+    code { background: #f0f0f0; padding: 0.25rem 0.4rem; }
+    .out { font-size: 1.1rem; margin: 0.75rem 0; }
+    .warn { color: #a60; }
+  </style>
+</head>
+<body>
+  <h1>Focal point helper</h1>
+  <p>
+    Load an image. In <strong>Chrome</strong>, the Face Detection API (if available) finds a face and
+    suggests <code>object-position</code> as <strong>X% Y%</strong> (face center in image coordinates).
+    Use the key <code>Category/filename</code> in <code>src/data/imageFocalPoints.js</code>.
+  </p>
+  <p><input type="file" id="file" accept="image/*" /></p>
+  <div id="box">
+    <img id="preview" alt="" />
+    <div id="faceRect" hidden></div>
+  </div>
+  <p id="status" class="warn"></p>
+  <p class="out" id="out"></p>
+  <p class="out" id="snippet"></p>
+
+  <script>
+    const file = document.getElementById('file')
+    const preview = document.getElementById('preview')
+    const faceRect = document.getElementById('faceRect')
+    const status = document.getElementById('status')
+    const out = document.getElementById('out')
+    const snippet = document.getElementById('snippet')
+
+    file.addEventListener('change', async () => {
+      const f = file.files?.[0]
+      if (!f) return
+      faceRect.hidden = true
+      out.textContent = ''
+      snippet.textContent = ''
+      status.textContent = ''
+
+      const url = URL.createObjectURL(f)
+      preview.onload = () => {
+        URL.revokeObjectURL(url)
+        run()
+      }
+      preview.src = url
+    })
+
+    async function run() {
+      const w = preview.naturalWidth
+      const h = preview.naturalHeight
+      if (!w || !h) return
+
+      if (!('FaceDetector' in window)) {
+        status.textContent =
+          'FaceDetector API not available in this browser. Use Chrome, or set object-position manually in DevTools (tweak % until the crop looks right).'
+        suggestManual()
+        return
+      }
+
+      try {
+        const detector = new FaceDetector({ fastMode: true, maxDetectedFaces: 3 })
+        const faces = await detector.detect(preview)
+        if (!faces.length) {
+          status.textContent = 'No face detected — try manual positioning or a clearer face photo.'
+          suggestManual()
+          return
+        }
+
+        const face = faces.reduce((a, b) => {
+          const area = (f) => f.boundingBox.width * f.boundingBox.height
+          return area(a) >= area(b) ? a : b
+        })
+
+        const { x, y, width, height } = face.boundingBox
+        const cx = x + width / 2
+        const cy = y + height / 2
+        const px = (cx / w) * 100
+        const py = (cy / h) * 100
+
+        faceRect.style.left = (x / w) * 100 + '%'
+        faceRect.style.top = (y / h) * 100 + '%'
+        faceRect.style.width = (width / w) * 100 + '%'
+        faceRect.style.height = (height / h) * 100 + '%'
+        faceRect.hidden = false
+
+        const pos = `${px.toFixed(1)}% ${py.toFixed(1)}%`
+        out.innerHTML = 'Suggested <code>object-position</code>: <strong>' + pos + '</strong>'
+        snippet.textContent = `'YourCategory/yourfilename': '${pos}',`
+        status.textContent = ''
+      } catch (e) {
+        status.textContent = 'Face detection failed: ' + e.message
+        suggestManual()
+      }
+    }
+
+    function suggestManual() {
+      const pos = '50% 35%'
+      snippet.textContent = `// example: 'Wedding/4': '${pos}',`
+    }
+  </script>
+</body>
+</html>

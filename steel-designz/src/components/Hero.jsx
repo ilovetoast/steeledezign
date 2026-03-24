@@ -12,8 +12,6 @@ import BannerCanvas from './BannerCanvas'
 
 gsap.registerPlugin(ScrollTrigger)
 
-const HERO_ORDER = ['dramatic', 'editorial', 'portfolio']
-
 export default function Hero() {
   const containerRef = useRef(null)
   const labelRef = useRef(null)
@@ -40,27 +38,18 @@ export default function Hero() {
 
   const heroSections = useMemo(() => {
     const categories = buildGalleryData()
-    const bySlug = Object.fromEntries(categories.map((c) => [c.slug, c]))
     const sections = []
-    HERO_ORDER.forEach((slug) => {
-      const cat = bySlug[slug]
-      if (cat?.images?.length) {
-        cat.images.forEach((img, i) => {
-          sections.push({ label: cat.title.toUpperCase(), slug, image: img, isFirstInGroup: i === 0 })
-        })
-      }
-    })
-    if (sections.length === 0) {
-      const all = categories.flatMap((c) =>
-        c.images.map((img, i) => ({
-          label: c.title.toUpperCase(),
-          slug: c.slug,
+    categories.forEach((cat) => {
+      if (!cat.images?.length) return
+      cat.images.forEach((img, i) => {
+        sections.push({
+          label: cat.title.toUpperCase(),
+          slug: cat.slug,
           image: img,
           isFirstInGroup: i === 0,
-        }))
-      )
-      return all
-    }
+        })
+      })
+    })
     return sections
   }, [])
 
@@ -260,8 +249,10 @@ export default function Hero() {
 
   return (
     <div ref={containerRef} className="hero-panels">
-      <div ref={labelRef} className="panel-label-fixed" aria-hidden="true">
-        Andrea Steele Makeup
+      <div className="panel-label-anchor">
+        <div ref={labelRef} className="panel-label-fixed" aria-hidden="true">
+          Andrea Steele Makeup
+        </div>
       </div>
       <section id="banner" className="hero-banner" aria-label="Andrea Steele Makeup">
         <div className="hero-banner-bg">
@@ -303,6 +294,8 @@ export default function Hero() {
                     sizes="(max-width: 1700px) 95vw, 1700px"
                     alt={section.image.alt || 'Makeup portfolio'}
                     className="panel-image-img"
+                    loading={i > 2 ? 'lazy' : 'eager'}
+                    decoding="async"
                     style={section.image.objectPosition ? { objectPosition: section.image.objectPosition } : undefined}
                   />
                 ) : null}

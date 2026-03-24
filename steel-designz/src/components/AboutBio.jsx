@@ -1,7 +1,7 @@
 /**
  * Short bio + headshot - union makeup artist, Los Angeles
  */
-import { IMDB_PROFILE_URL } from '../data/featuredProductions'
+import { IMDB_PROFILE_URL, INSTAGRAM_URL } from '../data/featuredProductions'
 import headshotImg from '../assets/images/production/andrea-headshot.jpg'
 
 const BIO =
@@ -29,14 +29,24 @@ export default function AboutBio() {
             About
           </h2>
           <p className="text-neutral-300 font-light leading-relaxed">{BIO}</p>
-          <a
-            href={IMDB_PROFILE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block mt-6 text-sm tracking-wider uppercase text-neutral-500 hover:text-white transition-colors"
-          >
-            View full credits on IMDb →
-          </a>
+          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 justify-center sm:justify-start">
+            <a
+              href={IMDB_PROFILE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm tracking-wider uppercase text-neutral-500 hover:text-white transition-colors"
+            >
+              View full credits on IMDb →
+            </a>
+            <a
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm tracking-wider uppercase text-neutral-500 hover:text-white transition-colors"
+            >
+              Instagram →
+            </a>
+          </div>
         </div>
       </div>
     </section>

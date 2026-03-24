@@ -72,19 +72,32 @@
   background: #0a0a0a;
 }
 
-.panel-label-fixed {
+/*
+ * White + mix-blend-mode: difference (no filter: invert — invert makes text black on #000).
+ * Blend on the fixed anchor so it composites against the page behind the panel.
+ */
+.panel-label-anchor {
   position: fixed;
   left: 12vw;
   top: 50%;
   transform: translateY(-50%);
+  z-index: 20;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  color: #fff;
+}
+
+.panel-label-fixed {
+  position: relative;
+  margin: 0;
   font-size: clamp(2.5rem, 7vw, 5rem);
   font-weight: 300;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #fff;
-  mix-blend-mode: difference;
-  z-index: 20;
-  pointer-events: none;
+  color: inherit;
+  line-height: 1.05;
+  text-align: left;
+  white-space: nowrap;
 }
 
 /* Smaller label when showing CONTACT (productions + about + form area) */
@@ -92,9 +105,40 @@
   font-size: clamp(1.75rem, 4.5vw, 3rem);
 }
 
+/* Narrow: move left as the image fills the width */
+@media (max-width: 1100px) {
+  .panel-label-anchor {
+    left: clamp(1rem, 6vw, 12vw);
+  }
+}
+
+@media (max-width: 900px) {
+  .panel-label-anchor {
+    left: clamp(0.75rem, 4vw, 10vw);
+  }
+
+  .panel-label-fixed {
+    font-size: clamp(1.25rem, 3.5vw + 0.5rem, 2.75rem);
+    letter-spacing: 0.12em;
+  }
+}
+
+@media (max-width: 640px) {
+  .panel-label-anchor {
+    left: clamp(0.5rem, 3vw, 8vw);
+  }
+
+  .panel-label-fixed {
+    font-size: clamp(1rem, 2.8vw + 0.45rem, 2rem);
+    letter-spacing: 0.08em;
+    white-space: normal;
+    max-width: min(88vw, 20rem);
+  }
+}
+
 /* Hide floating label on mobile/tablet only when at contact page — keeps labels in gallery */
 @media (max-width: 1024px) {
-  body.in-contact-section .panel-label-fixed {
+  body.in-contact-section .panel-label-anchor {
     display: none;
   }
 }

@@ -9,6 +9,8 @@ export default defineConfig({
     react(),
     tailwindcss(),
     imagetools({
+      // Default plugin only matches .tiff — include .tif so glob imports work
+      include: /^[^?]+\.(avif|gif|heif|jpeg|jpg|png|tiff?|webp)(\?.*)?$/i,
       defaultDirectives: (url) => {
         if (url.pathname?.includes('images') || url.toString().includes('images')) {
           return new URLSearchParams({ w: '320;640;1024;1600;2000', format: 'webp' })

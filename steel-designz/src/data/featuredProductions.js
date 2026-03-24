@@ -20,3 +20,4 @@ export const FEATURED_PRODUCTIONS = [
 ]
 
 export const IMDB_PROFILE_URL = 'https://www.imdb.com/name/nm4988249/'
+export const INSTAGRAM_URL = 'https://www.instagram.com/andrea_steele_makeup/'

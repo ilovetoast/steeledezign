@@ -8,8 +8,6 @@ import { getLenis } from '../animations/smoothScroll'
 import { buildGalleryData } from '../utils/buildGalleryData'
 import FloatingCursor from './FloatingCursor'
 
-const HERO_ORDER = ['dramatic', 'editorial', 'portfolio']
-
 export default function Layout({ children }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   useLenis()
@@ -31,13 +29,9 @@ export default function Layout({ children }) {
 
   const navItems = useMemo(() => {
     const categories = buildGalleryData()
-    const bySlug = Object.fromEntries(categories.map((c) => [c.slug, c]))
-    const items = []
-    HERO_ORDER.forEach((slug) => {
-      if (bySlug[slug]?.images?.length) {
-        items.push({ id: `category-${slug}`, label: bySlug[slug].title })
-      }
-    })
+    const items = categories
+      .filter((c) => c.images?.length)
+      .map((c) => ({ id: `category-${c.slug}`, label: c.title }))
     items.push({ id: 'contact', label: 'Contact' })
     return items
   }, [])
