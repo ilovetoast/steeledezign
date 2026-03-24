@@ -14,6 +14,7 @@ export default function FloatingCursor() {
   }, [])
   const cursorRef = useRef(null)
   const [isHovering, setIsHovering] = useState(false)
+  const [hoverLabel, setHoverLabel] = useState('VIEW')
   const mouseRef = useRef({ x: 0, y: 0 })
   const posRef = useRef({ x: 0, y: 0 })
 
@@ -29,11 +30,19 @@ export default function FloatingCursor() {
     }
 
     const handleMouseOver = (e) => {
-      if (e.target.closest('[data-cursor-hover]')) setIsHovering(true)
+      const el = e.target.closest('[data-cursor-hover]')
+      if (el) {
+        setIsHovering(true)
+        const t = el.dataset.cursorText?.trim()
+        setHoverLabel(t || 'VIEW')
+      }
     }
 
     const handleMouseOut = (e) => {
-      if (!e.relatedTarget?.closest('[data-cursor-hover]')) setIsHovering(false)
+      if (!e.relatedTarget?.closest('[data-cursor-hover]')) {
+        setIsHovering(false)
+        setHoverLabel('VIEW')
+      }
     }
 
     document.addEventListener('mousemove', handleMouseMove)
@@ -77,14 +86,18 @@ export default function FloatingCursor() {
 
   if (isTouch) return null
 
+  const isLong = hoverLabel.length > 6
+
   return (
     <div
       ref={cursorRef}
-      className="pointer-events-none fixed left-0 top-0 z-[100] w-12 h-12 rounded-full border border-white/80 flex items-center justify-center bg-black/40 backdrop-blur-sm scale-0 opacity-0"
+      className={`pointer-events-none fixed left-0 top-0 z-[100] rounded-full border border-white/80 flex items-center justify-center bg-black/50 backdrop-blur-sm scale-0 opacity-0 ${
+        isLong ? 'min-h-11 px-2.5 py-1 max-w-[7.5rem]' : 'w-12 h-12'
+      }`}
       aria-hidden="true"
     >
-      <span className="text-[8px] font-medium tracking-widest text-white">
-        VIEW
+      <span className="text-center font-medium tracking-wide text-white leading-tight text-[8px] uppercase">
+        {hoverLabel}
       </span>
     </div>
   )

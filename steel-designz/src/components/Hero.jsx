@@ -8,6 +8,7 @@ import { useLayoutEffect, useRef, useMemo, useState, useCallback } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { buildGalleryData, getCoverImage } from '../utils/buildGalleryData'
+import { formatStillsCaption } from '../utils/formatStillsCaption'
 import BannerCanvas from './BannerCanvas'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -271,39 +272,47 @@ export default function Hero() {
           <div className="hero-banner-overlay" />
         </div>
       </section>
-      {heroSections.map((section, i) => (
-        <section
-          key={i}
-          className="panel"
-          id={section.isFirstInGroup ? `category-${section.slug}` : undefined}
-        >
-          <div className="panel-perspective">
-            <div
-              className="panel-mask panel-mask-clickable"
-              role="button"
-              tabIndex={0}
-              onClick={() => section.image?.src && setExpandedIndex(i)}
-              onKeyDown={(e) => e.key === 'Enter' && section.image?.src && setExpandedIndex(i)}
-              aria-label={`Expand ${section.image?.alt || 'image'}`}
-            >
-              <div className="panel-image">
-                {section.image?.src ? (
-                  <img
-                    src={section.image.src}
-                    srcSet={section.image.srcSet}
-                    sizes="(max-width: 1700px) 95vw, 1700px"
-                    alt={section.image.alt || 'Makeup portfolio'}
-                    className="panel-image-img"
-                    loading={i > 2 ? 'lazy' : 'eager'}
-                    decoding="async"
-                    style={section.image.objectPosition ? { objectPosition: section.image.objectPosition } : undefined}
-                  />
-                ) : null}
+      {heroSections.map((section, i) => {
+        const isStills = section.slug === 'stills'
+        return (
+          <section
+            key={i}
+            className={`panel ${isStills ? 'panel--stills' : ''}`}
+            id={section.isFirstInGroup ? `category-${section.slug}` : undefined}
+          >
+            <div className="panel-perspective">
+              <div
+                className={`panel-mask panel-mask-clickable${isStills ? ' panel-mask--stills' : ''}`}
+                role="button"
+                tabIndex={0}
+                data-cursor-hover
+                data-cursor-text="Click to enlarge"
+                onClick={() => section.image?.src && setExpandedIndex(i)}
+                onKeyDown={(e) => e.key === 'Enter' && section.image?.src && setExpandedIndex(i)}
+                aria-label={`Expand ${section.image?.alt || 'image'}`}
+              >
+                <div className="panel-image">
+                  {section.image?.src ? (
+                    <img
+                      src={section.image.src}
+                      srcSet={section.image.srcSet}
+                      sizes="(max-width: 1700px) 95vw, 1700px"
+                      alt={section.image.alt || 'Makeup portfolio'}
+                      className="panel-image-img"
+                      loading={i > 2 ? 'lazy' : 'eager'}
+                      decoding="async"
+                      style={section.image.objectPosition ? { objectPosition: section.image.objectPosition } : undefined}
+                    />
+                  ) : null}
+                </div>
               </div>
+              {isStills && section.image?.filename ? (
+                <p className="panel-stills-caption">{formatStillsCaption(section.image.filename)}</p>
+              ) : null}
             </div>
-          </div>
-        </section>
-      ))}
+          </section>
+        )
+      })}
       {expandedIndex !== null && heroSections[expandedIndex]?.image && (
         <div
           ref={overlayRef}
@@ -318,13 +327,32 @@ export default function Hero() {
             className="image-expand-inner"
             onClick={(e) => e.stopPropagation()}
           >
-            <img
-              src={heroSections[expandedIndex].image.src}
-              srcSet={heroSections[expandedIndex].image.srcSet}
-              sizes="95vw"
-              alt={heroSections[expandedIndex].image.alt || 'Expanded view'}
-              style={heroSections[expandedIndex].image.objectPosition ? { objectPosition: heroSections[expandedIndex].image.objectPosition } : undefined}
-            />
+            {heroSections[expandedIndex].slug === 'stills' ? (
+              <>
+                <div className="image-expand-stills-frame">
+                  <img
+                    src={heroSections[expandedIndex].image.src}
+                    srcSet={heroSections[expandedIndex].image.srcSet}
+                    sizes="95vw"
+                    alt={heroSections[expandedIndex].image.alt || 'Expanded view'}
+                    style={heroSections[expandedIndex].image.objectPosition ? { objectPosition: heroSections[expandedIndex].image.objectPosition } : undefined}
+                  />
+                </div>
+                {heroSections[expandedIndex].image?.filename ? (
+                  <p className="image-expand-stills-caption">
+                    {formatStillsCaption(heroSections[expandedIndex].image.filename)}
+                  </p>
+                ) : null}
+              </>
+            ) : (
+              <img
+                src={heroSections[expandedIndex].image.src}
+                srcSet={heroSections[expandedIndex].image.srcSet}
+                sizes="95vw"
+                alt={heroSections[expandedIndex].image.alt || 'Expanded view'}
+                style={heroSections[expandedIndex].image.objectPosition ? { objectPosition: heroSections[expandedIndex].image.objectPosition } : undefined}
+              />
+            )}
           </div>
           <button
             type="button"

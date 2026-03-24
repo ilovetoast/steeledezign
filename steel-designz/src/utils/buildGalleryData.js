@@ -132,11 +132,12 @@ export function buildGalleryData() {
     .map(([slug, images]) => ({
       title: slug,
       slug: slug.toLowerCase().replace(/\s+/g, '-'),
-      images: images.map(({ src, srcSet, alt, objectPosition }) => ({
+      images: images.map(({ src, srcSet, alt, objectPosition, filename }) => ({
         src,
         srcSet,
         alt,
         objectPosition,
+        filename,
       })),
     }))
 }
