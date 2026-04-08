@@ -8,7 +8,7 @@ import { Helmet } from 'react-helmet-async'
 const SITE_URL = 'https://steeldesignz.com'
 const DEFAULT_TITLE = 'Andrea Steele Makeup | Union Makeup Artist Los Angeles'
 const DEFAULT_DESCRIPTION =
-  'Andrea Steele is a Los Angeles–based union makeup artist known for Oppenheimer, Westworld, and The Gorge. Specializing in makeup department for film and television.'
+  'Los Angeles–based union makeup artist with film and television department credits (including Oppenheimer, Westworld, and The Gorge). Also available for commercial, editorial, and bridal or event makeup—commissioned work with an on-set, production-minded approach.'
 const DEFAULT_IMAGE = `${SITE_URL}/og-image.jpg`
 const IMDB_URL = 'https://www.imdb.com/name/nm4988249/'
 
@@ -24,10 +24,19 @@ export default function SeoHead({
     name: 'Andrea Steele',
     url: SITE_URL,
     jobTitle: 'Makeup Artist',
-    description: 'Union makeup artist in Los Angeles. Makeup department credits include Oppenheimer, Westworld, and The Gorge.',
+    description:
+      'Union makeup artist in Los Angeles. Department credits on major film and television; commissioned work includes commercial, editorial, and bridal or event makeup.',
     image: image,
     sameAs: [IMDB_URL],
-    knowsAbout: ['Makeup Artistry', 'Film Makeup', 'Television Makeup', 'Editorial Makeup'],
+    knowsAbout: [
+      'Makeup Artistry',
+      'Film Makeup',
+      'Television Makeup',
+      'Commercial Makeup',
+      'Editorial Makeup',
+      'Bridal Makeup',
+      'Event Makeup',
+    ],
     areaServed: { '@type': 'Place', name: 'Los Angeles, California' },
   }
 
@@ -43,7 +52,8 @@ export default function SeoHead({
     '@context': 'https://schema.org',
     '@type': 'Portfolio',
     name: 'Andrea Steele Makeup Portfolio',
-    description: 'Makeup department work for film and television. Credits include Oppenheimer, Westworld, The Gorge, Judy Justice, and Cooper\'s Bar.',
+    description:
+      'Portfolio spanning union film and television, commercial and editorial work, and select bridal and private-event commissions. Representative credits include Oppenheimer, Westworld, The Gorge, and Cooper\'s Bar.',
     url: SITE_URL,
     author: { '@type': 'Person', name: 'Andrea Steele' },
   }
@@ -66,7 +76,7 @@ export default function SeoHead({
       {/* Keywords */}
       <meta
         name="keywords"
-        content="Andrea Steele, makeup artist, Los Angeles, union makeup artist, film makeup, television makeup, Oppenheimer, Westworld, The Gorge, makeup department, IATSE, Hollywood makeup"
+        content="Andrea Steele, makeup artist, Los Angeles, union makeup artist, film makeup, television makeup, commercial makeup, editorial makeup, wedding makeup, bridal makeup, Oppenheimer, Westworld, The Gorge, makeup department, IATSE, Hollywood makeup"
       />
 
       {/* Robots */}

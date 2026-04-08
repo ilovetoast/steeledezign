@@ -3,7 +3,7 @@
  * Docs: https://unicorn-forms.com/docs/embed-forms
  * Success via .uf-form-response or unicornToolz.onSuccess()
  */
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 
 const inputClass =
   'w-full px-4 py-3 bg-neutral-800 border border-neutral-700 text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-500 transition-colors'
@@ -129,7 +129,11 @@ export default function Contact() {
             placeholder="Your message..."
           />
         </div>
-        <div class="g-recaptcha" data-size="normal" data-sitekey="6LfVzIQsAAAAALZI8QX2ZKEh782vkO_RXCSeHXoo"></div>
+        <div
+          className="g-recaptcha"
+          data-size="normal"
+          data-sitekey="6LfVzIQsAAAAALZI8QX2ZKEh782vkO_RXCSeHXoo"
+        />
         <button
           type="submit"
           className="px-8 py-3 border border-white text-white hover:bg-white hover:text-black transition-colors"
@@ -138,6 +142,42 @@ export default function Contact() {
         </button>
         </div>
       </form>
+
+      <div
+        className="max-w-2xl mx-auto mt-20 pt-16 border-t border-neutral-800 px-0"
+        aria-labelledby="services-heading"
+      >
+        <h2
+          id="services-heading"
+          className="text-sm font-medium tracking-[0.28em] uppercase text-neutral-500 mb-6 text-center"
+        >
+          Services
+        </h2>
+        <p className="text-neutral-400 font-light leading-relaxed text-center text-sm md:text-base mb-8">
+          Commissioned makeup work is available across the areas below. Engagements are approached with the
+          same discipline as union film and television: clear communication, dependable on-set presence, and
+          work that holds under camera and in long days.
+        </p>
+        <ul className="text-neutral-400 font-light leading-relaxed text-sm md:text-base space-y-3 list-none text-center md:text-left max-w-xl mx-auto">
+          <li>
+            <span className="text-neutral-500">Film &amp; television — </span>
+            makeup department roles on features and episodic productions.
+          </li>
+          <li>
+            <span className="text-neutral-500">Commercial &amp; advertising — </span>
+            campaigns, spots, and branded content for agencies and production companies.
+          </li>
+          <li>
+            <span className="text-neutral-500">Editorial &amp; beauty — </span>
+            print, lookbooks, and beauty-focused stills.
+          </li>
+          <li>
+            <span className="text-neutral-500">Bridal &amp; events — </span>
+            wedding-day and private-event makeup, including trials where appropriate, typically on location
+            in Los Angeles and surrounding areas.
+          </li>
+        </ul>
+      </div>
     </section>
   )
 }
