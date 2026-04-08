@@ -10,6 +10,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { buildGalleryData, getCoverImage } from '../utils/buildGalleryData'
 import { formatStillsCaption } from '../utils/formatStillsCaption'
 import BannerCanvas from './BannerCanvas'
+import GalleryVideo from './GalleryVideo'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -289,10 +290,12 @@ export default function Hero() {
                 data-cursor-text="Click to enlarge"
                 onClick={() => section.image?.src && setExpandedIndex(i)}
                 onKeyDown={(e) => e.key === 'Enter' && section.image?.src && setExpandedIndex(i)}
-                aria-label={`Expand ${section.image?.alt || 'image'}`}
+                aria-label={`Expand ${section.image?.alt || 'media'}`}
               >
                 <div className="panel-image">
-                  {section.image?.src ? (
+                  {section.image?.isVideo && section.image.src ? (
+                    <GalleryVideo src={section.image.src} lazy={i > 2} variant="panel" />
+                  ) : section.image?.src ? (
                     <img
                       src={section.image.src}
                       srcSet={section.image.srcSet}
@@ -327,7 +330,9 @@ export default function Hero() {
             className="image-expand-inner"
             onClick={(e) => e.stopPropagation()}
           >
-            {heroSections[expandedIndex].slug === 'stills' ? (
+            {heroSections[expandedIndex].image.isVideo ? (
+              <GalleryVideo src={heroSections[expandedIndex].image.src} lazy={false} variant="expanded" />
+            ) : heroSections[expandedIndex].slug === 'stills' ? (
               <>
                 <div className="image-expand-stills-frame">
                   <img

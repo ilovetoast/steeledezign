@@ -1,22 +1,9 @@
 {
-  "minShortSidePx": 900,
-  "note": "Omitted at build time — short side below minimum, or HEIC (not supported by Vite imagetools; export as JPG/WebP to include). Stills are included even when smaller than minShortSidePx.",
+  "note": "Paths listed in omitted are skipped at build time (e.g. corrupt files). HEIC is not in the image glob — export as JPG/WebP to include. Dimension-based omissions were removed so all raster assets in the gallery folders are used.",
   "omitted": [
     "SPFX/IMG_0024.heic",
     "SPFX/IMG_0422.HEIC",
     "SPFX/IMG_1094.HEIC",
-    "SPFX/IMG_3669.HEIC",
-    "Beauty/1.jpeg",
-    "Beauty/10.jpeg",
-    "Beauty/12.jpeg",
-    "Beauty/6.jpeg",
-    "Beauty/Alannasmall.jpg",
-    "Beauty/cody2blue.jpg",
-    "Beauty/cody3 copy.jpg",
-    "Beauty/IMG_4539.jpg",
-    "Beauty/l (3).jpg",
-    "SPFX/IMG_0043.jpg",
-    "SPFX/Screen Shot 2013-11-07 at 5.30.25 PM.png",
-    "Wedding/image.jpeg"
+    "SPFX/IMG_3669.HEIC"
   ]
 }

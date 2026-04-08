@@ -1,16 +1,29 @@
 /**
  * Gallery from src/assets/images/<CategoryName>/
- * Skips: cover/, production/ (and Commercial/ — screen recordings only)
- * Omits paths listed in src/data/galleryExcluded.json (low resolution)
- * WebP responsive srcset; lazy-load in Hero for below-fold images
+ * Skips: cover/, production/
+ * Commercial/: MP4/WebM (and optional commericlas/) as video tiles; raster assets use WebP srcset.
+ * Omits paths listed in src/data/galleryExcluded.json
  */
 import { IMAGE_FOCAL_POINTS, IMAGE_FOCAL_BY_IMAGETOOLS_ID } from '../data/imageFocalPoints'
 import galleryExcluded from '../data/galleryExcluded.json'
 
-const SKIP_TOP_LEVEL = new Set(['cover', 'production', 'Commercial'])
+const SKIP_TOP_LEVEL = new Set(['cover', 'production'])
 
 /** Display order for known folders; others sort after */
-export const GALLERY_CATEGORY_ORDER = ['Beauty', 'SPFX', 'Stills', 'Wedding']
+export const GALLERY_CATEGORY_ORDER = ['Beauty', 'SPFX', 'Stills', 'Wedding', 'Commercial']
+
+const VIDEO_CATEGORY_KEY = 'Commercial'
+
+const videoModules = {
+  ...import.meta.glob('../assets/images/Commercial/**/*.{mp4,webm,mov,MOV,MP4,WEBM}', {
+    eager: true,
+    import: 'default',
+  }),
+  ...import.meta.glob('../assets/images/commericlas/**/*.{mp4,webm,mov,MOV,MP4,WEBM}', {
+    eager: true,
+    import: 'default',
+  }),
+}
 
 const excludedSet = new Set(galleryExcluded.omitted.map((p) => p.replace(/\\/g, '/')))
 
@@ -80,6 +93,13 @@ function parseModule(module) {
   return { src, srcSet }
 }
 
+function parseVideoUrl(module) {
+  const value = module?.default ?? module
+  if (typeof value === 'string') return value
+  if (value?.src && typeof value.src === 'string') return value.src
+  return ''
+}
+
 export function buildGalleryData() {
   const byCategory = {}
 
@@ -113,6 +133,27 @@ export function buildGalleryData() {
     })
   }
 
+  for (const [path, module] of Object.entries(videoModules)) {
+    const rawCategory = getCategoryFromPath(path)
+    if (rawCategory !== 'Commercial' && rawCategory !== 'commericlas') continue
+
+    const src = parseVideoUrl(module)
+    if (!src) continue
+
+    const filename = path.split('/').pop()?.replace(/\.[^.]+$/, '') || 'video'
+    if (!byCategory[VIDEO_CATEGORY_KEY]) {
+      byCategory[VIDEO_CATEGORY_KEY] = []
+    }
+    byCategory[VIDEO_CATEGORY_KEY].push({
+      src,
+      srcSet: undefined,
+      alt: 'Commercials — portfolio video',
+      filename,
+      objectPosition: 'center',
+      isVideo: true,
+    })
+  }
+
   for (const images of Object.values(byCategory)) {
     images.sort((a, b) => a.filename.localeCompare(b.filename, undefined, { numeric: true }))
   }
@@ -130,14 +171,15 @@ export function buildGalleryData() {
     .filter(([, imgs]) => imgs.length > 0)
     .sort(([a], [b]) => order(a, b))
     .map(([slug, images]) => ({
-      title: slug,
+      title: slug === 'Commercial' ? 'Commercials' : slug,
       slug: slug.toLowerCase().replace(/\s+/g, '-'),
-      images: images.map(({ src, srcSet, alt, objectPosition, filename }) => ({
+      images: images.map(({ src, srcSet, alt, objectPosition, filename, isVideo }) => ({
         src,
         srcSet,
         alt,
         objectPosition,
         filename,
+        isVideo: Boolean(isVideo),
       })),
     }))
 }
